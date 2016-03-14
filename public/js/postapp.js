@@ -1,4 +1,4 @@
-var app = angular.module('postApp',['ui.select2']);
+var app = angular.module('postApp',['ui.select2','ngFileUpload']);
 //client side controller to handle user problem submission
 app.controller('problemController' , function($scope,$http,$window){
 	
@@ -43,12 +43,82 @@ app.controller('problemController' , function($scope,$http,$window){
 	
 });//code ends here
 
-/* .directive('ngUpdateHidden',function() {
-    return function(scope, el, attr) {
-        var model = attr['ngModel'];
-        scope.$watch(model, function(nv) {
-            el.val(nv);
-        });
 
+//for file upload
+
+//for file upload
+
+app.controller('UploadController', ['$scope', 'Upload', '$timeout','$http', function ($scope, Upload, $timeout,$http) {
+    $scope.submit = function() {
+		console.log($scope.files);
+		//http method description
+       /*  $http({
+            method: 'post',
+            url: '/upload',
+            files :$scope.files,
+            headers: {
+                'Content-Type': 'multipart/form-data;'
+            }
+        }).success(function (data) {
+			console.log('success  '+angular.toJson(data));
+			alert(data.message);
+        });
+		 */
+		 
+		 $scope.uploadFiles($scope.files);
+     };
+	
+	
+    // for multiple files:
+    $scope.uploadFiles = function(files) {
+		console.log('running');
+        $scope.files = files;
+    //    $scope.errFiles = errFiles;
+        angular.forEach(files, function(file) {
+            file.upload = Upload.upload({
+                url: '/upload',
+                data: {file: file}
+				
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * 
+                                         evt.loaded / evt.total));
+										 console.log(file.progress);
+            });
+        });
     };
-}); */
+	/* $scope.uploadFiles = function(files, errFiles) {
+		console.log('running');
+        $scope.files = files;
+        $scope.errFiles = errFiles;
+        angular.forEach(files, function(file) {
+            file.upload = Upload.upload({
+                url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                data: {file: file}
+				
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * 
+                                         evt.loaded / evt.total));
+										 console.log(file.progress);
+            });
+        });
+    } */
+}]);
+

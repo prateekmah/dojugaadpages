@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+  <html ng-app="postApp">  <!--Binding the page with angular variable ng-app-->
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+ 
+	<body ng-controller="UploadController">
+  <h4>Upload on file select</h4>
+  <button ngf-select="uploadFiles($files, $invalidFiles)" multiple
+          accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+      Select Files</button>
+  <br><br>
+  Files:
+  <ul>
+    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"  
+            ng-bind="f.progress + '%'"></div>
+      </span>
+    </li>
+    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"  
+            ng-bind="f.progress + '%'"></div>
+      </span>
+    </li> 
+  </ul>
+  {{errorMsg}}
+  <button type = "submit" ng-click = "submit()">submit</button>
+	</body>
+	 <!--Import jQuery before materialize.js-->
+      <link rel="stylesheet" href="js/select2/select2.css">
+      <script type="text/javascript" src="js/jquery/dist/jquery.js"></script>
+      <script type="text/javascript" src="js/select2/select2.js"></script>
+	  
+	  <script type="text/javascript" src="js/angular/angular.js"></script>
+      <script type="text/javascript" src="js/angular-ui-select2/src/select2.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
+	  <script type="text/javascript" src="js/ng-file-upload/dist/ng-file-upload.min.js"></script>
+      <script src="js/postapp.js"></script>
+  
+ </html>
